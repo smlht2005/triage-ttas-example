@@ -43,7 +43,7 @@ const TriageForm = () => {
     const gcs = parseInt(v.gcs) || 15;
 
     if ((spo2 > 0 && spo2 < 80) || gcs <= 8) return 1;
-    if ((spo2 >= 80 && spo2 < 90) || sbp > 220 || hr > 150 || hr < 40) return 2;
+    if ((spo2 >= 80 && spo2 < 90) || sbp > 220 || hr > 150 || (hr > 0 && hr < 40)) return 2;
     if ((spo2 >= 90 && spo2 < 95) || sbp > 180 || hr > 120) return 3;
     if (sbp > 0 || hr > 0) return 4;
     return 5;
