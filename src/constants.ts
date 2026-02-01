@@ -1,3 +1,9 @@
+/**
+ * 更新時間：2026-02-01 11:45
+ * 作者：AI Assistant
+ * 更新摘要：TTAS 檢傷級別常量與配置
+ */
+
 // TTAS 檢傷級別閾值常量
 export const TRIAGE_THRESHOLDS = {
   SPO2_CRITICAL: 80,
