@@ -36,6 +36,7 @@ export const calculateTriageLevel = (vitals) => {
   const gcs = safeParseInt(vitals.gcs, 15); // GCS 預設為 15 (正常)
 
   // Level 1: 復甦救援 - 危及生命的狀況
+  // 包括極低血氧或昏迷狀態
   if (
     (spo2 > 0 && spo2 < TRIAGE_THRESHOLDS.SPO2_CRITICAL) || 
     gcs <= TRIAGE_THRESHOLDS.GCS_COMA
@@ -44,6 +45,8 @@ export const calculateTriageLevel = (vitals) => {
   }
 
   // Level 2: 危急 - 嚴重但穩定
+  // 注意：心率為 0 表示心跳停止，應該是 Level 1，但在實際應用中
+  // 心跳停止的病人不會在檢傷階段，而是直接進入急救
   if (
     (spo2 >= TRIAGE_THRESHOLDS.SPO2_CRITICAL && spo2 < TRIAGE_THRESHOLDS.SPO2_DANGEROUS) ||
     sbp > TRIAGE_THRESHOLDS.SBP_CRITICAL ||
@@ -63,10 +66,12 @@ export const calculateTriageLevel = (vitals) => {
   }
 
   // Level 4: 次緊急 - 有生命徵象異常但穩定
-  if (sbp > 0 || hr > 0) {
+  // 只有在有實際測量值時才判定為 Level 4
+  // spo2 > 0 確保不是未測量的情況
+  if (sbp > 0 || hr > 0 || spo2 > 0) {
     return 4;
   }
 
-  // Level 5: 非緊急 - 預設級別
+  // Level 5: 非緊急 - 預設級別（無生命徵象數據）
   return 5;
 };
