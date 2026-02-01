@@ -27,6 +27,15 @@
 
 ---
 
+## Chrome 測試與截圖
+
+- **Chrome 測試 Skill**：專案內 `.cursor/skills/chrome-browser-testing/` 提供 Cursor 用於在 Chrome 上測試表單、擷取畫面並產出測試結果文件的指引。
+- **測試結果文件**：撰寫於 [docs/TEST_RESULTS.md](./docs/TEST_RESULTS.md)；截圖存放於 `docs/screenshots/`（建議檔名 `YYYYMMDD_步驟簡述.jpg`）。
+- **擷取 JPG**：需在 Cursor 中啟用 **BrowserLoop** MCP；安裝步驟見 [docs/testplan/INSTALL_BROWSERLOOP.md](./docs/testplan/INSTALL_BROWSERLOOP.md)。計畫說明見 [docs/testplan/README.md](./docs/testplan/README.md)。
+- **完整測試與 PDF**：執行 `npm run test:screenshots` 擷取 8 張截圖；執行 `npm run report:pdf` 產生 `docs/reports/TEST_REPORT.pdf`。PDF 技能見 `.cursor/skills/pdf-report-generator/SKILL.md`。
+
+---
+
 ## 🌟 核心功能
 
 - **狀態驅動表單**：使用 `React Hook Form` 進行高效的表單狀態管理與渲染優化。
