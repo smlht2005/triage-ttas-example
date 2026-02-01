@@ -13,8 +13,8 @@ coverage
 *.test.tsx
 __tests__
 
-# Build
-build
+# Build artifacts (commented out to allow deployment artifacts)
+# build directory is needed for deployment
 dist
 
 # IDE

@@ -1,7 +1,7 @@
-name: triage-ttas-example
+name: triage-ttas-prod
 
 services:
-  - name: triage-ttas
+  - name: triage-ttas-prod
     build:
       buildCommand: npm run build
       outputDirectory: build
