@@ -7,12 +7,13 @@ import {
 } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { calculateTriageLevel } from './utils/triageCalculator';
+import { calculateTriageLevel, VitalsData } from './utils/triageCalculator';
 import { 
   LEVEL_COLORS, 
   GCS_OPTIONS, 
   VITAL_SIGNS, 
-  TRIAGE_LEVELS 
+  TRIAGE_LEVELS,
+  TriageLevel
 } from './constants';
 
 // 1. 定義驗證架構
@@ -29,8 +30,10 @@ const triageSchema = z.object({
   finalLevel: z.number().min(1).max(5)
 });
 
-const TriageForm = () => {
-  const { control, watch, setValue, handleSubmit, formState: { errors } } = useForm({
+type TriageFormData = z.infer<typeof triageSchema>;
+
+const TriageForm: React.FC = () => {
+  const { control, watch, setValue, handleSubmit, formState: { errors } } = useForm<TriageFormData>({
     resolver: zodResolver(triageSchema),
     defaultValues: {
       vitals: { sbp: '', hr: '', spo2: '', rr: '', temp: '', gcs: '15' },
@@ -42,15 +45,15 @@ const TriageForm = () => {
   // 監聽數值變動
   const watchedVitals = watch('vitals');
 
-  // 2. 自動判定邏輯 (TTAS 簡化版) - 使用提取的計算函數
-  const autoLevel = calculateTriageLevel(watchedVitals);
+  // 2. 自動判定邏輯 (TTAS 簡化版)
+  const autoLevel = calculateTriageLevel(watchedVitals as VitalsData);
 
-  // 3. 自動更新最終級別 (僅在自動判定變動時)
+  // 3. 自動更新最終級別
   useEffect(() => {
     setValue('finalLevel', autoLevel);
   }, [autoLevel, setValue]);
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: TriageFormData) => {
     console.log('提交數據:', data);
     alert(`檢傷成功！最終級別: Level ${data.finalLevel}`);
   };
@@ -59,7 +62,7 @@ const TriageForm = () => {
     <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
         <Typography variant="h5" color="primary" gutterBottom sx={{ fontWeight: 'bold' }}>
-          🏥 TTAS 急診檢傷系統 (React Hook Form 版)
+          🏥 TTAS 急診檢傷系統 (TypeScript 版)
         </Typography>
         <Divider sx={{ my: 3 }} />
 
@@ -80,7 +83,7 @@ const TriageForm = () => {
                           label={vitalSign.label}
                           size="small"
                           type={vitalSign.type}
-                          value={value}
+                          value={value || ''}
                           onChange={onChange}
                         />
                       )}
@@ -134,7 +137,7 @@ const TriageForm = () => {
                 <Typography variant="body1">系統初步建議：</Typography>
                 <Chip 
                   label={`Level ${autoLevel}`} 
-                  sx={{ bgcolor: LEVEL_COLORS[autoLevel], color: 'white', fontWeight: 'bold' }} 
+                  sx={{ bgcolor: LEVEL_COLORS[autoLevel as TriageLevel], color: 'white', fontWeight: 'bold' }} 
                 />
               </Box>
             </Grid>
@@ -150,7 +153,7 @@ const TriageForm = () => {
                       name="finalLevel"
                       control={control}
                       render={({ field }) => (
-                        <Select {...field} label="最終級別">
+                        <Select {...field} label="最終級別" value={field.value || 5}>
                           {TRIAGE_LEVELS.map(level => (
                             <MenuItem key={level} value={level}>Level {level}</MenuItem>
                           ))}

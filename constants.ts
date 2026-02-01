@@ -13,8 +13,10 @@ export const TRIAGE_THRESHOLDS = {
   HR_WARNING: 120
 };
 
+export type TriageLevel = 1 | 2 | 3 | 4 | 5;
+
 // 檢傷級別顏色對應
-export const LEVEL_COLORS = {
+export const LEVEL_COLORS: Record<TriageLevel, string> = {
   1: '#d32f2f', // 紅色 - 復甦救援
   2: '#f57c00', // 橘色 - 危急
   3: '#fbc02d', // 黃色 - 緊急
@@ -29,8 +31,14 @@ export const GCS_OPTIONS = [
   { value: '8', label: 'GCS ≤ 8 (昏迷)' }
 ];
 
+export interface VitalSignField {
+  name: 'sbp' | 'hr' | 'spo2' | 'rr' | 'temp';
+  label: string;
+  type: string;
+}
+
 // 生命徵象欄位
-export const VITAL_SIGNS = [
+export const VITAL_SIGNS: VitalSignField[] = [
   { name: 'sbp', label: 'SBP', type: 'number' },
   { name: 'hr', label: 'HR', type: 'number' },
   { name: 'spo2', label: 'SpO2', type: 'number' },
@@ -39,4 +47,4 @@ export const VITAL_SIGNS = [
 ];
 
 // 檢傷級別選項
-export const TRIAGE_LEVELS = [1, 2, 3, 4, 5];
+export const TRIAGE_LEVELS: TriageLevel[] = [1, 2, 3, 4, 5];

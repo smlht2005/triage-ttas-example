@@ -34,7 +34,8 @@
 
 ## 🛠️ 技術棧
 
-- **Frontend**: React 18+
+- **Frontend**: React 18+ (TypeScript)
+- **Language**: TypeScript 5.x
 - **UI Framework**: Material UI (MUI) v5
 - **Form Management**: React Hook Form
 - **Validation**: Zod
