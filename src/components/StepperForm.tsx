@@ -85,20 +85,20 @@ export const StepperForm: React.FC = () => {
   // 渲染當前步驟內容
   const renderStepContent = () => {
     switch (activeStep) {
-      case 0:
-        return <VitalSignsStep control={control} autoLevel={autoLevel} />;
-      case 1:
-        return (
-          <ComplaintStep
-            control={control}
-            errors={formState.errors}
-            watchComplaint={watchComplaint}
-          />
-        );
-      case 2:
-        return <ConfirmationStep control={control} formData={formData} autoLevel={autoLevel} />;
-      default:
-        return null;
+    case 0:
+      return <VitalSignsStep control={control} autoLevel={autoLevel} />;
+    case 1:
+      return (
+        <ComplaintStep
+          control={control}
+          errors={formState.errors}
+          watchComplaint={watchComplaint}
+        />
+      );
+    case 2:
+      return <ConfirmationStep control={control} formData={formData} autoLevel={autoLevel} />;
+    default:
+      return null;
     }
   };
 

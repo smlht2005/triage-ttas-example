@@ -119,8 +119,8 @@ export const ComplaintStep: React.FC<ComplaintStepProps> = ({
                   charCount < minChars
                     ? 'linear-gradient(90deg, #f44336 0%, #ff6b6b 100%)'
                     : charCount >= maxChars
-                    ? 'linear-gradient(90deg, #ff9800 0%, #ffa726 100%)'
-                    : 'linear-gradient(90deg, #4caf50 0%, #66bb6a 100%)',
+                      ? 'linear-gradient(90deg, #ff9800 0%, #ffa726 100%)'
+                      : 'linear-gradient(90deg, #4caf50 0%, #66bb6a 100%)',
                 transition: 'all 0.3s ease-in-out'
               }
             }}

@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# test automation script (temporary)
+test-chrome.js
+
 # production
 /build
 
