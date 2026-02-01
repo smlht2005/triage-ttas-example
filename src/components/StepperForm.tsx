@@ -103,7 +103,7 @@ export const StepperForm: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <Box sx={{ width: '100%' }}>
       <Paper
         elevation={3}
         sx={{
@@ -294,6 +294,6 @@ export const StepperForm: React.FC = () => {
         onClose={handleCloseSuccess}
         finalLevel={formData.finalLevel}
       />
-    </Container>
+    </Box>
   );
 };

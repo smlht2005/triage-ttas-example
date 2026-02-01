@@ -7,6 +7,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { StepperForm } from './components/StepperForm';
+import { MainLayout } from './components/MainLayout';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme/theme';
 
@@ -18,7 +19,9 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <StepperForm />
+      <MainLayout>
+        <StepperForm />
+      </MainLayout>
     </ThemeProvider>
   </React.StrictMode>
 );
