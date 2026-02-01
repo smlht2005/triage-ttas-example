@@ -17,16 +17,16 @@ import {
   Emergency as EmergencyIcon
 } from '@mui/icons-material';
 import { GRADIENTS, SHADOWS } from '../theme/theme';
+import { TriageDashboard } from './TriageDashboard';
+import { PatientList } from './PatientList';
+import { StepperForm } from './StepperForm';
 
 const drawerWidth = 260;
 
-interface MainLayoutProps {
-  children: React.ReactNode;
-}
-
-export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+export const MainLayout: React.FC = () => {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [currentView, setCurrentView] = useState('triage');
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -34,10 +34,19 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   const menuItems = [
     { text: '儀表板', icon: <DashboardIcon />, id: 'dashboard' },
-    { text: '快速檢傷', icon: <TriageIcon />, id: 'triage', active: true },
+    { text: '快速檢傷', icon: <TriageIcon />, id: 'triage' },
     { text: '候診名單', icon: <PatientIcon />, id: 'patients' },
     { text: '歷史紀錄', icon: <HistoryIcon />, id: 'history' },
   ];
+
+  const renderContent = () => {
+    switch (currentView) {
+      case 'dashboard': return <TriageDashboard />;
+      case 'patients': return <PatientList />;
+      case 'triage': return <StepperForm />;
+      default: return <StepperForm />;
+    }
+  };
 
   const drawerContent = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -62,7 +71,11 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         {menuItems.map((item) => (
           <ListItem key={item.id} disablePadding sx={{ mb: 1 }}>
             <ListItemButton 
-              selected={item.active}
+              selected={currentView === item.id}
+              onClick={() => {
+                setCurrentView(item.id);
+                setMobileOpen(false);
+              }}
               sx={{ 
                 borderRadius: 2,
                 '&.Mui-selected': {
@@ -73,7 +86,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               }}
             >
               <ListItemIcon sx={{ minWidth: 45 }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} primaryTypographyProps={{ fontWeight: item.active ? 700 : 500 }} />
+              <ListItemText primary={item.text} primaryTypographyProps={{ fontWeight: currentView === item.id ? 700 : 500 }} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -107,7 +120,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           backdropFilter: 'blur(10px)',
           boxShadow: 'none',
           borderBottom: '1px solid rgba(0,0,0,0.05)',
-          color: 'text.primary'
+          color: 'text.primary',
+          zIndex: theme.zIndex.drawer + 1
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -123,7 +137,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Chip 
               icon={<PersonIcon fontSize="small" />} 
-              label="當前病人：王小明 (M123456789)" 
+              label="當前登入：陳大明 醫師 (ID: 8852)" 
               color="primary" 
               variant="outlined" 
               sx={{ fontWeight: 'bold' }}
@@ -177,7 +191,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         }}
       >
         <Container maxWidth="lg">
-          {children}
+          {renderContent()}
         </Container>
       </Box>
     </Box>

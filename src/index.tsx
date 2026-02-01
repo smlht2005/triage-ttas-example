@@ -19,9 +19,7 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <MainLayout>
-        <StepperForm />
-      </MainLayout>
+      <MainLayout />
     </ThemeProvider>
   </React.StrictMode>
 );
