@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Box, Drawer, AppBar, Toolbar, List, Typography, Divider, 
   IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText,
-  Avatar, Tooltip, Container, useTheme, Chip
+  Avatar, Tooltip, Container, useTheme, Chip, useMediaQuery
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -14,18 +14,25 @@ import {
   Search as SearchIcon,
   Notifications as NotifyIcon,
   Person as PersonIcon,
-  Emergency as EmergencyIcon
+  Emergency as EmergencyIcon,
+  ChevronRight as ChevronRightIcon
 } from '@mui/icons-material';
 import { GRADIENTS, SHADOWS } from '../theme/theme';
 import { TriageDashboard } from './TriageDashboard';
 import { PatientList } from './PatientList';
 import { StepperForm } from './StepperForm';
+import { InfoBar } from './InfoBar';
 
 const drawerWidth = 260;
+const infoBarWidth = 320;
 
 export const MainLayout: React.FC = () => {
   const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
+  const isTablet = useMediaQuery(theme.breakpoints.up('md'));
+  
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(true);
   const [currentView, setCurrentView] = useState('triage');
 
   const handleDrawerToggle = () => {
@@ -50,7 +57,6 @@ export const MainLayout: React.FC = () => {
 
   const drawerContent = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      {/* 醫院 Logo 區 */}
       <Box sx={{ 
         p: 3, 
         display: 'flex', 
@@ -61,15 +67,12 @@ export const MainLayout: React.FC = () => {
         mb: 2
       }}>
         <EmergencyIcon fontSize="large" />
-        <Typography variant="h6" sx={{ fontWeight: 'bold', letterSpacing: 1 }}>
-          醫域醫院 HIS
-        </Typography>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', letterSpacing: 1 }}>醫域醫院 HIS</Typography>
       </Box>
 
-      {/* 選單列表 */}
       <List sx={{ px: 1 }}>
         {menuItems.map((item) => (
-          <ListItem key={item.id} disablePadding sx={{ mb: 1 }}>
+          <ListItem key={item.id} disablePadding sx={{ mb: 0.5 }}>
             <ListItemButton 
               selected={currentView === item.id}
               onClick={() => {
@@ -85,32 +88,29 @@ export const MainLayout: React.FC = () => {
                 }
               }}
             >
-              <ListItemIcon sx={{ minWidth: 45 }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} primaryTypographyProps={{ fontWeight: currentView === item.id ? 700 : 500 }} />
+              <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} primaryTypographyProps={{ variant: 'body2', fontWeight: currentView === item.id ? 700 : 500 }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
       <Box sx={{ flexGrow: 1 }} />
-      
       <Divider />
-      
-      {/* 使用者資訊區 */}
-      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Avatar sx={{ bgcolor: theme.palette.secondary.main }}>陳</Avatar>
+      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Avatar sx={{ bgcolor: theme.palette.secondary.main, width: 32, height: 32, fontSize: '0.875rem' }}>陳</Avatar>
         <Box>
-          <Typography variant="body2" sx={{ fontWeight: 'bold' }}>陳大明 醫師</Typography>
+          <Typography variant="caption" sx={{ fontWeight: 'bold', display: 'block' }}>陳大明 醫師</Typography>
           <Typography variant="caption" color="text.secondary">急診室 A 區</Typography>
         </Box>
-        <IconButton size="small" sx={{ ml: 'auto' }}><SettingsIcon fontSize="small" /></IconButton>
+        <IconButton size="small" sx={{ ml: 'auto' }}><SettingsIcon fontSize="inherit" /></IconButton>
       </Box>
     </Box>
   );
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
-      {/* AppBar */}
+      {/* 1. Header (AppBar) */}
       <AppBar 
         position="fixed" 
         sx={{ 
@@ -124,38 +124,32 @@ export const MainLayout: React.FC = () => {
           zIndex: theme.zIndex.drawer + 1
         }}
       >
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar sx={{ justifyContent: 'space-between', minHeight: 64 }}>
+          <IconButton color="inherit" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}><MenuIcon /></IconButton>
           
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Stack direction="row" spacing={2} alignItems="center">
             <Chip 
               icon={<PersonIcon fontSize="small" />} 
-              label="當前登入：陳大明 醫師 (ID: 8852)" 
+              label="當前病人：王小明 (M123456789)" 
               color="primary" 
               variant="outlined" 
-              sx={{ fontWeight: 'bold' }}
+              sx={{ fontWeight: 'bold', borderRadius: 2 }}
             />
-          </Box>
+            <Typography variant="caption" color="text.secondary" sx={{ display: { xs: 'none', md: 'block' } }}>
+              抵達：2026-02-02 07:05
+            </Typography>
+          </Stack>
 
           <Box sx={{ display: 'flex', gap: 1 }}>
+            <Tooltip title="AI 分析控制"><IconButton onClick={() => setInfoOpen(!infoOpen)} color={infoOpen ? "primary" : "default"}><AIIcon /></IconButton></Tooltip>
             <Tooltip title="搜尋"><IconButton><SearchIcon /></IconButton></Tooltip>
             <Tooltip title="通知"><IconButton><NotifyIcon /></IconButton></Tooltip>
           </Box>
         </Toolbar>
       </AppBar>
 
-      {/* Drawer */}
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
+      {/* 2. Left Sidebar (Drawer) */}
+      <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
         <Drawer
           variant="temporary"
           open={mobileOpen}
@@ -180,20 +174,50 @@ export const MainLayout: React.FC = () => {
         </Drawer>
       </Box>
 
-      {/* Main Content */}
+      {/* 3. Main Content Area */}
       <Box
         component="main"
         sx={{ 
           flexGrow: 1, 
-          p: 3, 
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          mt: '64px'
+          p: { xs: 2, md: 3 }, 
+          width: { sm: `calc(100% - ${drawerWidth}px - ${infoOpen && isDesktop ? infoBarWidth : 0}px)` },
+          mt: '64px',
+          transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth="xl" sx={{ p: 0 }}>
           {renderContent()}
         </Container>
       </Box>
+
+      {/* 4. Right InfoBar */}
+      <Drawer
+        variant={isDesktop ? "persistent" : "temporary"}
+        anchor="right"
+        open={infoOpen}
+        onClose={() => setInfoOpen(false)}
+        sx={{
+          width: infoOpen ? infoBarWidth : 0,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: infoBarWidth,
+            boxSizing: 'border-box',
+            border: 'none',
+            bgcolor: 'background.default',
+            mt: '64px',
+            height: 'calc(100% - 64px)',
+            boxShadow: '-4px 0 15px rgba(0,0,0,0.02)'
+          },
+        }}
+      >
+        <InfoBar />
+      </Drawer>
     </Box>
   );
 };
+
+import { Stack } from '@mui/material';
+import { Psychology as AIIcon } from '@mui/icons-material';
