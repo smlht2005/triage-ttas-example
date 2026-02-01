@@ -38,6 +38,7 @@
 
 ## 🌟 核心功能
 
+- **🚀 線上預覽**: [https://triage-ttas.zeabur.app/](https://triage-ttas.zeabur.app/)
 - **狀態驅動表單**：使用 `React Hook Form` 進行高效的表單狀態管理與渲染優化。
 - **TypeScript 型別安全**：全面使用 TS 定義醫療數據結構，避免計算錯誤。
 - **即時自動判定**：當醫護人員輸入 SBP, HR, SpO2 或 GCS 等生命徵象時，系統會根據內建邏輯自動計算建議的檢傷級別 (Level 1-5)。
