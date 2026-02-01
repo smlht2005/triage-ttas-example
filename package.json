@@ -1,14 +1,25 @@
 {
   "name": "triage-ttas-example",
   "version": "1.0.0",
-  "description": "",
+  "description": "Taiwan Triage and Acuity Scale (TTAS) emergency triage system built with React, Material UI, React Hook Form and Zod",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint . --ext .js,.jsx"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "triage",
+    "ttas",
+    "emergency",
+    "medical",
+    "react",
+    "material-ui"
+  ],
+  "author": "smlht2005 <wisdom20101024@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
