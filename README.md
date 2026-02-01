@@ -77,6 +77,39 @@
    npm run build
    ```
 
+## ☁️ 部署到 Zeabur Cloud
+
+本專案已配置 Zeabur 雲端部署，版本為 **v1.1.0**。
+
+### 快速部署
+
+1. **連接 GitHub 倉庫**
+   - 前往 [Zeabur](https://zeabur.com)
+   - 選擇「從 GitHub 導入」
+   - 選擇 `smlht2005/triage-ttas-example` 倉庫
+
+2. **自動檢測**
+   - Zeabur 會自動檢測 React 專案
+   - 使用 `zeabur.yaml` 配置文件進行部署
+
+3. **環境變數**（可選）
+   - `NODE_ENV=production`
+   - `REACT_APP_VERSION=1.1.0`
+
+### 配置文件
+
+- **zeabur.yaml**: Zeabur 部署配置
+- **.dockerignore**: 優化構建排除不必要文件
+
+### 部署後驗證
+
+部署完成後，訪問您的 Zeabur 域名，確認：
+- ✅ 應用程式正常運行
+- ✅ 表單功能正常
+- ✅ 版本顯示為 1.1.0
+
+---
+
 ## 📋 檢傷判定邏輯 (簡化參考)
 
 | 級別 | 定義 | 關鍵指標 (範例) |

@@ -1,0 +1,18 @@
+name: triage-ttas-prod
+
+services:
+  - name: triage-ttas-prod
+    build:
+      buildCommand: npm run build
+      outputDirectory: build
+      installCommand: npm install
+    
+    # Environment configuration
+    env:
+      NODE_ENV: production
+      REACT_APP_VERSION: "1.1.0"
+    
+    # Port configuration (if needed for preview)
+    ports:
+      - type: http
+        port: 3000
