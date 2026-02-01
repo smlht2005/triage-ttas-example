@@ -13,13 +13,16 @@
 1. **[📄 完成報告-請先閱讀.md](./完成報告-請先閱讀.md)**  
    👉 **從這裡開始！** 了解代碼審查結果和下一步該做什麼
 
-2. **[📄 CODE_REVIEW_ZH-TW.md](./CODE_REVIEW_ZH-TW.md)**  
+2. **[🛠️ TROUBLESHOOTING.md](./TROUBLESHOOTING.md)**  
+   👉 **常見問題解決** 遇到底層錯誤或設定問題時的求救指南
+
+3. **[📄 CODE_REVIEW_ZH-TW.md](./CODE_REVIEW_ZH-TW.md)**  
    詳細的代碼審查報告，包含優點、需要改進的地方和具體建議
 
-3. **[📘 PULL_REQUEST_GUIDE_ZH-TW.md](./PULL_REQUEST_GUIDE_ZH-TW.md)**  
+4. **[📘 PULL_REQUEST_GUIDE_ZH-TW.md](./PULL_REQUEST_GUIDE_ZH-TW.md)**  
    Pull Request 完整指南，適合初學者學習 Git 和 GitHub 工作流程
 
-4. **[📊 IMPROVEMENTS_SUMMARY.md](./IMPROVEMENTS_SUMMARY.md)**  
+5. **[📊 IMPROVEMENTS_SUMMARY.md](./IMPROVEMENTS_SUMMARY.md)**  
    代碼改進摘要，列出所有已實施的改進
 
 ---
@@ -27,6 +30,7 @@
 ## 🌟 核心功能
 
 - **狀態驅動表單**：使用 `React Hook Form` 進行高效的表單狀態管理與渲染優化。
+- **TypeScript 型別安全**：全面使用 TS 定義醫療數據結構，避免計算錯誤。
 - **即時自動判定**：當醫護人員輸入 SBP, HR, SpO2 或 GCS 等生命徵象時，系統會根據內建邏輯自動計算建議的檢傷級別 (Level 1-5)。
 - **人工覆核機制**：系統自動判定後，預設帶入最終確認欄位，允許醫護人員根據臨床判斷進行手動修改與最終確認。
 - **資料驗證**：整合 `Zod` 進行嚴格的欄位驗證（例如病人主訴為必填）。
@@ -80,20 +84,21 @@
 
 ```
 triage-ttas-example/
-├── public/
-│   └── index.html               # 應用入口 HTML
-├── src/
-│   ├── index.tsx                # React 入口
+├── public/                      # 靜態檔案
+│   └── index.html               # 入口 HTML
+├── src/                         # 原始碼
+│   ├── index.tsx                # React 入口點
 │   ├── TriageForm.tsx           # 主要表單組件
-│   ├── constants.ts             # 常量定義（閾值、顏色等）
+│   ├── constants.ts             # 常量與型別定義
 │   ├── utils/
-│   │   └── triageCalculator.ts  # 檢傷級別計算邏輯
-│   └── __tests__/
+│   │   └── triageCalculator.ts  # 檢傷計算邏輯
+│   └── __tests__/               # 自動化測試
 │       └── utils/
-│           └── triageCalculator.test.ts  # 單元測試
+│           └── triageCalculator.test.ts
 ├── .eslintrc.json               # ESLint 配置
 ├── .prettierrc                  # Prettier 配置
 ├── .env.example                 # 環境變數範例
+├── tsconfig.json                # TypeScript 配置
 ├── package.json                 # 專案配置和依賴
 └── [繁體中文文檔]               # 完整的中文文檔
 

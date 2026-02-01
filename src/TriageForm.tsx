@@ -54,7 +54,8 @@ const TriageForm: React.FC = () => {
   }, [autoLevel, setValue]);
 
   const onSubmit = (data: TriageFormData) => {
-    console.log('提交數據:', data);
+    // Log submitted data for debugging
+    // console.log('提交數據:', data);
     alert(`檢傷成功！最終級別: Level ${data.finalLevel}`);
   };
 
