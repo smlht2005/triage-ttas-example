@@ -3,13 +3,13 @@
  * 檔案名稱：MainLayout.tsx
  * 修改日期：2026-02-02
  * 修改人員：Tao (AI Assistant)
- * 修改說明：主佈署架構，包含 AppBar、左側導航、中央主視圖與右側 InfoBar
+ * 修改說明：修復手機版 InfoBar 顯示異常，調整為全螢幕/動態寬度並優化 Z-Index
  */
 import React, { useState } from 'react';
 import { 
   Box, Drawer, AppBar, Toolbar, List, Typography, Divider, 
   IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText,
-  Avatar, Tooltip, Container, useTheme, Chip, useMediaQuery
+  Avatar, Tooltip, Container, useTheme, Chip, useMediaQuery, Stack
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -22,7 +22,7 @@ import {
   Notifications as NotifyIcon,
   Person as PersonIcon,
   Emergency as EmergencyIcon,
-  ChevronRight as ChevronRightIcon
+  Psychology as AIIcon
 } from '@mui/icons-material';
 import { GRADIENTS, SHADOWS } from '../theme/theme';
 import { TriageDashboard } from './TriageDashboard';
@@ -31,15 +31,15 @@ import { StepperForm } from './StepperForm';
 import { InfoBar } from './InfoBar';
 
 const drawerWidth = 260;
-const infoBarWidth = 320;
+const infoBarWidthDesktop = 320;
 
 export const MainLayout: React.FC = () => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
-  const isTablet = useMediaQuery(theme.breakpoints.up('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [infoOpen, setInfoOpen] = useState(true);
+  const [infoOpen, setInfoOpen] = useState(isDesktop); // 桌面版預設開啟
   const [currentView, setCurrentView] = useState('triage');
 
   const handleDrawerToggle = () => {
@@ -128,7 +128,7 @@ export const MainLayout: React.FC = () => {
           boxShadow: 'none',
           borderBottom: '1px solid rgba(0,0,0,0.05)',
           color: 'text.primary',
-          zIndex: theme.zIndex.drawer + 1
+          zIndex: theme.zIndex.drawer + 2 // 確保在所有 Drawer 之上
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between', minHeight: 64 }}>
@@ -137,20 +137,25 @@ export const MainLayout: React.FC = () => {
           <Stack direction="row" spacing={2} alignItems="center">
             <Chip 
               icon={<PersonIcon fontSize="small" />} 
-              label="當前病人：王小明 (M123456789)" 
+              label={isMobile ? "王小明" : "當前病人：王小明 (M123456789)"}
               color="primary" 
               variant="outlined" 
               sx={{ fontWeight: 'bold', borderRadius: 2 }}
             />
-            <Typography variant="caption" color="text.secondary" sx={{ display: { xs: 'none', md: 'block' } }}>
-              抵達：2026-02-02 07:05
-            </Typography>
           </Stack>
 
           <Box sx={{ display: 'flex', gap: 1 }}>
-            <Tooltip title="AI 分析控制"><IconButton onClick={() => setInfoOpen(!infoOpen)} color={infoOpen ? "primary" : "default"}><AIIcon /></IconButton></Tooltip>
-            <Tooltip title="搜尋"><IconButton><SearchIcon /></IconButton></Tooltip>
-            <Tooltip title="通知"><IconButton><NotifyIcon /></IconButton></Tooltip>
+            <Tooltip title="AI 輔助工具">
+              <IconButton 
+                onClick={() => setInfoOpen(!infoOpen)} 
+                color={infoOpen ? "primary" : "default"}
+                sx={{ bgcolor: infoOpen ? 'rgba(102, 126, 234, 0.1)' : 'transparent' }}
+              >
+                <AIIcon />
+              </IconButton>
+            </Tooltip>
+            {!isMobile && <IconButton><SearchIcon /></IconButton>}
+            <IconButton><NotifyIcon /></IconButton>
           </Box>
         </Toolbar>
       </AppBar>
@@ -187,7 +192,10 @@ export const MainLayout: React.FC = () => {
         sx={{ 
           flexGrow: 1, 
           p: { xs: 2, md: 3 }, 
-          width: { sm: `calc(100% - ${drawerWidth}px - ${infoOpen && isDesktop ? infoBarWidth : 0}px)` },
+          width: { 
+            xs: '100%',
+            lg: `calc(100% - ${drawerWidth}px - ${infoOpen ? infoBarWidthDesktop : 0}px)` 
+          },
           mt: '64px',
           transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
@@ -200,31 +208,35 @@ export const MainLayout: React.FC = () => {
         </Container>
       </Box>
 
-      {/* 4. Right InfoBar */}
+      {/* 4. Right InfoBar (AI Support) */}
       <Drawer
         variant={isDesktop ? "persistent" : "temporary"}
         anchor="right"
         open={infoOpen}
         onClose={() => setInfoOpen(false)}
         sx={{
-          width: infoOpen ? infoBarWidth : 0,
+          width: infoOpen ? { xs: '100%', sm: infoBarWidthDesktop } : 0,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: infoBarWidth,
+            width: { xs: '100%', sm: infoBarWidthDesktop },
             boxSizing: 'border-box',
             border: 'none',
             bgcolor: 'background.default',
-            mt: '64px',
-            height: 'calc(100% - 64px)',
-            boxShadow: '-4px 0 15px rgba(0,0,0,0.02)'
+            mt: isDesktop ? '64px' : 0, // 桌面版避開 header，手機版全螢幕
+            height: isDesktop ? 'calc(100% - 64px)' : '100%',
+            boxShadow: '-4px 0 15px rgba(0,0,0,0.05)',
+            zIndex: theme.zIndex.drawer + 1
           },
         }}
       >
+        {/* 手機版增加一個關閉按鈕 */}
+        {!isDesktop && (
+          <Box sx={{ p: 1, display: 'flex', justifyContent: 'flex-start' }}>
+            <IconButton onClick={() => setInfoOpen(false)}><MenuIcon sx={{ transform: 'rotate(90deg)' }} /></IconButton>
+          </Box>
+        )}
         <InfoBar />
       </Drawer>
     </Box>
   );
 };
-
-import { Stack } from '@mui/material';
-import { Psychology as AIIcon } from '@mui/icons-material';
