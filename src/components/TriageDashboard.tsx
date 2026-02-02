@@ -1,3 +1,10 @@
+/**
+ * 專案名稱：醫域醫院 HIS 系統
+ * 檔案名稱：TriageDashboard.tsx
+ * 修改日期：2026-02-02
+ * 修改人員：Tao (AI Assistant)
+ * 修改說明：急診室即時概況儀表板，包含統計數據與級別分佈
+ */
 import React from 'react';
 import { 
   Grid, Paper, Typography, Box, Card, CardContent, 

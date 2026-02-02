@@ -1,3 +1,10 @@
+/**
+ * 專案名稱：醫域醫院 HIS 系統
+ * 檔案名稱：MainLayout.tsx
+ * 修改日期：2026-02-02
+ * 修改人員：Tao (AI Assistant)
+ * 修改說明：主佈署架構，包含 AppBar、左側導航、中央主視圖與右側 InfoBar
+ */
 import React, { useState } from 'react';
 import { 
   Box, Drawer, AppBar, Toolbar, List, Typography, Divider, 

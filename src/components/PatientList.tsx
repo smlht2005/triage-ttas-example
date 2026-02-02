@@ -1,3 +1,10 @@
+/**
+ * 專案名稱：醫域醫院 HIS 系統
+ * 檔案名稱：PatientList.tsx
+ * 修改日期：2026-02-02
+ * 修改人員：Tao (AI Assistant)
+ * 修改說明：候診名單列表，提供病患狀態追蹤與基礎資訊展示
+ */
 import React from 'react';
 import { 
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 

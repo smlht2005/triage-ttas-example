@@ -1,3 +1,10 @@
+/**
+ * 專案名稱：醫域醫院 HIS 系統
+ * 檔案名稱：InfoBar.tsx
+ * 修改日期：2026-02-02
+ * 修改人員：Tao (AI Assistant)
+ * 修改說明：右側輔助資訊欄，顯示 AI 輔助分析、檢傷建議與臨床提示
+ */
 import React from 'react';
 import { 
   Box, Typography, Paper, Stack, Divider, Chip, 

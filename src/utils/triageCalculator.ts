@@ -1,3 +1,10 @@
+/**
+ * 專案名稱：醫域醫院 HIS 系統
+ * 檔案名稱：triageCalculator.ts
+ * 修改日期：2026-02-02
+ * 修改人員：Tao (AI Assistant)
+ * 修改說明：核心檢傷判定計算邏輯 (TTAS 標準)
+ */
 import { TRIAGE_THRESHOLDS, TriageLevel } from '../constants';
 
 /**

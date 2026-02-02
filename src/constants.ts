@@ -4,6 +4,13 @@
  * 更新摘要：TTAS 檢傷級別常量與配置
  */
 
+/**
+ * 專案名稱：醫域醫院 HIS 系統
+ * 檔案名稱：constants.ts
+ * 修改日期：2026-02-02
+ * 修改人員：Tao (AI Assistant)
+ * 修改說明：系統常量與 TypeScript 型別定義
+ */
 // TTAS 檢傷級別閾值常量
 export const TRIAGE_THRESHOLDS = {
   SPO2_CRITICAL: 80,
