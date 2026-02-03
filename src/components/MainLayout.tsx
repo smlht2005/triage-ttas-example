@@ -219,6 +219,8 @@ export const MainLayout: React.FC = () => {
         sx={{ 
           flexGrow: 1, 
           p: { xs: 2, md: 3 }, 
+          // 修正佈局：在桌面版 InfoBar 開啟時，透過 margin-right 騰出空間，避免覆蓋
+          mr: isDesktop && infoOpen ? `${infoBarWidthDesktop}px` : 0,
           width: { 
             xs: '100%',
             lg: `calc(100% - ${drawerWidth}px - ${infoOpen ? infoBarWidthDesktop : 0}px)` 
