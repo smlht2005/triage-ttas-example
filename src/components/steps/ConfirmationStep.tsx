@@ -195,7 +195,7 @@ export const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
           </Typography>
           <FormControl
             fullWidth
-            size="large"
+            size="medium"
             sx={{
               '& .MuiOutlinedInput-root': {
                 transition: 'all 0.3s ease-in-out',

@@ -21,7 +21,7 @@ import {
   Search as SearchIcon,
   Notifications as NotifyIcon,
   Person as PersonIcon,
-  Emergency as EmergencyIcon,
+  LocalHospital as EmergencyIcon,
   Psychology as AIIcon,
   Close as CloseIcon
 } from '@mui/icons-material';
