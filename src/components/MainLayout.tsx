@@ -130,10 +130,14 @@ export const MainLayout: React.FC = () => {
         position="fixed" 
         sx={{ 
           width: { 
+            // 修正：頂欄寬度需同時考慮左側 Sidebar 與右側 InfoBar
+            lg: `calc(100% - ${drawerWidth}px - ${infoOpen ? infoBarWidthDesktop : 0}px)`,
             sm: `calc(100% - ${drawerWidth}px)`,
             xs: '100%' 
           },
           ml: { sm: `${drawerWidth}px`, xs: 0 },
+          // 修正：桌面版 InfoBar 開啟時，頂欄也需要右側邊距，避免被覆蓋
+          mr: isDesktop && infoOpen ? `${infoBarWidthDesktop}px` : 0,
           bgcolor: 'rgba(255, 255, 255, 0.85)',
           backdropFilter: 'blur(12px)',
           boxShadow: 'none',
