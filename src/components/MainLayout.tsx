@@ -30,6 +30,8 @@ import { TriageDashboard } from './TriageDashboard';
 import { PatientList } from './PatientList';
 import { StepperForm } from './StepperForm';
 import { InfoBar } from './InfoBar';
+import { useTriageForm } from '../hooks/useTriageForm';
+import { FormProvider } from 'react-hook-form';
 
 const drawerWidth = 260;
 const infoBarWidthDesktop = 320;
@@ -42,6 +44,11 @@ export const MainLayout: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(isDesktop);
   const [currentView, setCurrentView] = useState('triage');
+
+  // 將表單狀態提升至 Layout 層級，實現 InfoBar 連動
+  const triageForm = useTriageForm();
+  const { formMethods, autoLevel } = triageForm;
+  const formData = formMethods.watch();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -58,8 +65,8 @@ export const MainLayout: React.FC = () => {
     switch (currentView) {
       case 'dashboard': return <TriageDashboard />;
       case 'patients': return <PatientList />;
-      case 'triage': return <StepperForm />;
-      default: return <StepperForm />;
+      case 'triage': return <StepperForm triageForm={triageForm} />;
+      default: return <StepperForm triageForm={triageForm} />;
     }
   };
 
@@ -263,7 +270,7 @@ export const MainLayout: React.FC = () => {
             <IconButton onClick={() => setInfoOpen(false)} color="inherit"><CloseIcon /></IconButton>
           </Box>
         )}
-        <InfoBar />
+        <InfoBar formData={formData} autoLevel={autoLevel} />
       </Drawer>
     </Box>
   );

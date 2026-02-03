@@ -42,8 +42,9 @@ export const useTriageForm = () => {
 
   const { watch, setValue, trigger } = formMethods;
 
-  // 監聽生命徵象變動
-  const watchedVitals = watch('vitals');
+  // 監聽完整表單數據，包含生命徵象與主訴
+  const formData = watch();
+  const watchedVitals = formData.vitals;
 
   // 自動計算檢傷級別
   const autoLevel = calculateTriageLevel(watchedVitals as VitalsData);

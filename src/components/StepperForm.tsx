@@ -28,6 +28,7 @@ import { ComplaintStep } from './steps/ComplaintStep';
 import { ConfirmationStep } from './steps/ConfirmationStep';
 import { SuccessDialog } from './SuccessDialog';
 import { ANIMATION_DURATION } from '../theme/theme';
+import { TriageFormData } from '../hooks/useTriageForm';
 
 const steps = [
   { label: '生命徵象', description: '輸入病人生命徵象數據' },
@@ -35,7 +36,11 @@ const steps = [
   { label: '確認提交', description: '確認資料並完成檢傷' }
 ];
 
-export const StepperForm: React.FC = () => {
+interface StepperFormProps {
+  triageForm: any; // 為了快速開發暫用 any，理想應定義類型
+}
+
+export const StepperForm: React.FC<StepperFormProps> = ({ triageForm }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
@@ -49,7 +54,7 @@ export const StepperForm: React.FC = () => {
     handleNext,
     handleBack,
     handleReset
-  } = useTriageForm();
+  } = triageForm;
 
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [slideIn, setSlideIn] = useState(true);
