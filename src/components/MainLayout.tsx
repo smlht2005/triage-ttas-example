@@ -1,7 +1,12 @@
 /**
  * 專案名稱：醫域醫院 HIS 系統
  * 檔案名稱：MainLayout.tsx
- * 修改日期：2026-02-02
+ * 
+ * 更新時間：2026-02-02 15:34
+ * 更新人員：AI Assistant
+ * 更新摘要：修復 ESLint 錯誤（縮排和引號格式）
+ * 
+ * 更新時間：2026-02-02
  * 修改人員：Tao (AI Assistant)
  * 修改說明：修復手機版 InfoBar 顯示異常，調整為全螢幕/動態寬度並優化 Z-Index
  */
@@ -55,10 +60,10 @@ export const MainLayout: React.FC = () => {
 
   const renderContent = () => {
     switch (currentView) {
-      case 'dashboard': return <TriageDashboard />;
-      case 'patients': return <PatientList />;
-      case 'triage': return <StepperForm />;
-      default: return <StepperForm />;
+    case 'dashboard': return <TriageDashboard />;
+    case 'patients': return <PatientList />;
+    case 'triage': return <StepperForm />;
+    default: return <StepperForm />;
     }
   };
 
@@ -137,7 +142,7 @@ export const MainLayout: React.FC = () => {
           <Stack direction="row" spacing={2} alignItems="center">
             <Chip 
               icon={<PersonIcon fontSize="small" />} 
-              label={isMobile ? "王小明" : "當前病人：王小明 (M123456789)"}
+              label={isMobile ? '王小明' : '當前病人：王小明 (M123456789)'}
               color="primary" 
               variant="outlined" 
               sx={{ fontWeight: 'bold', borderRadius: 2 }}
@@ -148,7 +153,7 @@ export const MainLayout: React.FC = () => {
             <Tooltip title="AI 輔助工具">
               <IconButton 
                 onClick={() => setInfoOpen(!infoOpen)} 
-                color={infoOpen ? "primary" : "default"}
+                color={infoOpen ? 'primary' : 'default'}
                 sx={{ bgcolor: infoOpen ? 'rgba(102, 126, 234, 0.1)' : 'transparent' }}
               >
                 <AIIcon />
@@ -210,7 +215,7 @@ export const MainLayout: React.FC = () => {
 
       {/* 4. Right InfoBar (AI Support) */}
       <Drawer
-        variant={isDesktop ? "persistent" : "temporary"}
+        variant={isDesktop ? 'persistent' : 'temporary'}
         anchor="right"
         open={infoOpen}
         onClose={() => setInfoOpen(false)}
