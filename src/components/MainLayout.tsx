@@ -8,7 +8,7 @@
  * 
  * 更新時間：2026-02-02
  * 修改人員：Tao (AI Assistant)
- * 修改說明：修復手機版 InfoBar 顯示異常，調整為全螢幕/動態寬度並優化 Z-Index
+ * 修改說明：修復手機版 Header 內容溢出導致 InfoBar 按鈕不可見的問題，精簡移動端顯示
  */
 import React, { useState } from 'react';
 import { 
@@ -26,14 +26,17 @@ import {
   Search as SearchIcon,
   Notifications as NotifyIcon,
   Person as PersonIcon,
-  Emergency as EmergencyIcon,
-  Psychology as AIIcon
+  LocalHospital as EmergencyIcon,
+  Psychology as AIIcon,
+  Close as CloseIcon
 } from '@mui/icons-material';
 import { GRADIENTS, SHADOWS } from '../theme/theme';
 import { TriageDashboard } from './TriageDashboard';
 import { PatientList } from './PatientList';
 import { StepperForm } from './StepperForm';
 import { InfoBar } from './InfoBar';
+import { useTriageForm } from '../hooks/useTriageForm';
+import { FormProvider } from 'react-hook-form';
 
 const drawerWidth = 260;
 const infoBarWidthDesktop = 320;
@@ -44,8 +47,13 @@ export const MainLayout: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [infoOpen, setInfoOpen] = useState(isDesktop); // 桌面版預設開啟
+  const [infoOpen, setInfoOpen] = useState(isDesktop);
   const [currentView, setCurrentView] = useState('triage');
+
+  // 將表單狀態提升至 Layout 層級，實現 InfoBar 連動
+  const triageForm = useTriageForm();
+  const { formMethods, autoLevel } = triageForm;
+  const formData = formMethods.watch();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -62,8 +70,8 @@ export const MainLayout: React.FC = () => {
     switch (currentView) {
     case 'dashboard': return <TriageDashboard />;
     case 'patients': return <PatientList />;
-    case 'triage': return <StepperForm />;
-    default: return <StepperForm />;
+    case 'triage': return <StepperForm triageForm={triageForm} />;
+    default: return <StepperForm triageForm={triageForm} />;
     }
   };
 
@@ -126,41 +134,64 @@ export const MainLayout: React.FC = () => {
       <AppBar 
         position="fixed" 
         sx={{ 
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          bgcolor: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(10px)',
+          width: { 
+            // 修正：頂欄寬度需同時考慮左側 Sidebar 與右側 InfoBar
+            lg: `calc(100% - ${drawerWidth}px - ${infoOpen ? infoBarWidthDesktop : 0}px)`,
+            sm: `calc(100% - ${drawerWidth}px)`,
+            xs: '100%' 
+          },
+          ml: { sm: `${drawerWidth}px`, xs: 0 },
+          // 修正：桌面版 InfoBar 開啟時，頂欄也需要右側邊距，避免被覆蓋
+          mr: isDesktop && infoOpen ? `${infoBarWidthDesktop}px` : 0,
+          bgcolor: 'rgba(255, 255, 255, 0.85)',
+          backdropFilter: 'blur(12px)',
           boxShadow: 'none',
           borderBottom: '1px solid rgba(0,0,0,0.05)',
           color: 'text.primary',
-          zIndex: theme.zIndex.drawer + 2 // 確保在所有 Drawer 之上
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
         }}
       >
-        <Toolbar sx={{ justifyContent: 'space-between', minHeight: 64 }}>
-          <IconButton color="inherit" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}><MenuIcon /></IconButton>
-          
-          <Stack direction="row" spacing={2} alignItems="center">
+        <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 1, sm: 2 } }}>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <IconButton color="inherit" edge="start" onClick={handleDrawerToggle} sx={{ display: { sm: 'none' } }}><MenuIcon /></IconButton>
+            
+            {/* 手機版縮減文字，避免溢出 */}
             <Chip 
               icon={<PersonIcon fontSize="small" />} 
               label={isMobile ? '王小明' : '當前病人：王小明 (M123456789)'}
               color="primary" 
               variant="outlined" 
-              sx={{ fontWeight: 'bold', borderRadius: 2 }}
+              sx={{ 
+                fontWeight: 'bold', 
+                borderRadius: 2,
+                maxWidth: { xs: '120px', sm: 'none' },
+                '& .MuiChip-label': { overflow: 'hidden', textOverflow: 'ellipsis' }
+              }}
             />
           </Stack>
 
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Tooltip title="AI 輔助工具">
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* AI 按鈕在手機版優先顯示 */}
+            <Tooltip title="AI 輔助分析">
               <IconButton 
                 onClick={() => setInfoOpen(!infoOpen)} 
                 color={infoOpen ? 'primary' : 'default'}
-                sx={{ bgcolor: infoOpen ? 'rgba(102, 126, 234, 0.1)' : 'transparent' }}
+                sx={{ 
+                  bgcolor: infoOpen ? 'rgba(102, 126, 234, 0.1)' : 'transparent',
+                  mx: 0.5 
+                }}
               >
                 <AIIcon />
               </IconButton>
             </Tooltip>
+            
+            {/* 搜尋在手機版隱藏以節省空間 */}
             {!isMobile && <IconButton><SearchIcon /></IconButton>}
-            <IconButton><NotifyIcon /></IconButton>
+            <IconButton size={isMobile ? "small" : "medium"}><NotifyIcon /></IconButton>
           </Box>
         </Toolbar>
       </AppBar>
@@ -197,6 +228,8 @@ export const MainLayout: React.FC = () => {
         sx={{ 
           flexGrow: 1, 
           p: { xs: 2, md: 3 }, 
+          // 修正佈局：在桌面版 InfoBar 開啟時，透過 margin-right 騰出空間，避免覆蓋
+          mr: isDesktop && infoOpen ? `${infoBarWidthDesktop}px` : 0,
           width: { 
             xs: '100%',
             lg: `calc(100% - ${drawerWidth}px - ${infoOpen ? infoBarWidthDesktop : 0}px)` 
@@ -227,20 +260,28 @@ export const MainLayout: React.FC = () => {
             boxSizing: 'border-box',
             border: 'none',
             bgcolor: 'background.default',
-            mt: isDesktop ? '64px' : 0, // 桌面版避開 header，手機版全螢幕
+            mt: isDesktop ? '64px' : 0, 
             height: isDesktop ? 'calc(100% - 64px)' : '100%',
             boxShadow: '-4px 0 15px rgba(0,0,0,0.05)',
-            zIndex: theme.zIndex.drawer + 1
+            zIndex: (theme) => theme.zIndex.drawer + 3 // 確保在 AppBar 之上
           },
         }}
       >
-        {/* 手機版增加一個關閉按鈕 */}
+        {/* 手機版頂部關閉導航列 */}
         {!isDesktop && (
-          <Box sx={{ p: 1, display: 'flex', justifyContent: 'flex-start' }}>
-            <IconButton onClick={() => setInfoOpen(false)}><MenuIcon sx={{ transform: 'rotate(90deg)' }} /></IconButton>
+          <Box sx={{ 
+            p: 1.5, 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            background: GRADIENTS.primary,
+            color: 'white'
+          }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 'bold', ml: 1 }}>AI 輔助分析系統</Typography>
+            <IconButton onClick={() => setInfoOpen(false)} color="inherit"><CloseIcon /></IconButton>
           </Box>
         )}
-        <InfoBar />
+        <InfoBar formData={formData} autoLevel={autoLevel} />
       </Drawer>
     </Box>
   );
