@@ -1,4 +1,11 @@
 /**
+ * 更新時間：2026-02-04 15:48
+ * 作者：AI Assistant
+ * 更新摘要：將導航按鈕向上移動，減少表單內容與按鈕之間的空白間距 (Mark 4)
+ *   - 減少步驟內容區域的 minHeight (從 300/400/450 調整為 200/250)
+ *   - 減少按鈕區域的上方間距 (mt: 4→2, pt: 3→2)
+ *   - 優化表單佈局，讓按鈕更緊貼表單內容
+ * 
  * 更新時間：2026-02-01 11:41
  * 作者：AI Assistant
  * 更新摘要：建立主要 StepperForm 組件，整合 MUI Stepper 與所有步驟組件，包含動畫與響應式設計
@@ -205,7 +212,7 @@ export const StepperForm: React.FC<StepperFormProps> = ({ triageForm }) => {
                 mountOnEnter
                 unmountOnExit
               >
-                <Box sx={{ minHeight: { xs: 300, sm: 400, md: 450 } }}>
+                <Box sx={{ minHeight: { xs: 200, sm: 250 } }}>
                   {renderStepContent()}
                 </Box>
               </Slide>
@@ -216,8 +223,8 @@ export const StepperForm: React.FC<StepperFormProps> = ({ triageForm }) => {
                   display: 'flex',
                   flexDirection: { xs: 'column', sm: 'row' },
                   gap: 2,
-                  mt: 4,
-                  pt: 3,
+                  mt: 2,
+                  pt: 2,
                   borderTop: '1px solid',
                   borderColor: 'divider'
                 }}
